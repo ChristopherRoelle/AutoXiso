@@ -11,7 +11,7 @@ namespace AutoXisoExtractor
     {
         private string inputPath = ".\\input\\";
         private string outputPath = ".\\output\\";
-        private string xisoPath = ".\\dependents\\ExtractXISO\\extract-xiso.exe";
+        private string xisoPath = ".\\dependents\\extract-xiso.exe";
         private string[] extensions = { ".iso", ".xiso" };
 
         private List<ROM> romList = new List<ROM>();

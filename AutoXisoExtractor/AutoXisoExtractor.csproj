@@ -6,5 +6,16 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+	
+	<ItemGroup>
+		<None Include="dependents\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+    </ItemGroup>
+
+	<Target Name="CreateInputOutputFolders" BeforeTargets="Build">
+		<MakeDir Directories="$(OutDir)input" />
+		<MakeDir Directories="$(OutDir)output" />
+	</Target>
 
 </Project>
