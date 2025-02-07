@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.Intrinsics.Arm;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,8 +10,9 @@ namespace AutoXisoExtractor
 {
     internal class AutoXiso
     {
-        private string inputPath = ".\\input\\";
+        private string inputPath = ".\\romInput\\";
         private string outputPath = ".\\output\\";
+        private string repackPath = ".\\packXISOInput\\";
         private string xisoPath = ".\\dependents\\extract-xiso.exe";
         private string[] extensions = { ".iso", ".xiso" };
 
@@ -26,6 +28,7 @@ namespace AutoXisoExtractor
             menuItems.Add(new MenuItem("List", "Lists detected ROMs", true, ListROMs));
             menuItems.Add(new MenuItem("Extract One", "Extracts a single ROM", true, ExtractROM));
             menuItems.Add(new MenuItem("Extract All", "Extracts all detected ROMs", true, ExtractROMs));
+            menuItems.Add(new MenuItem("Package XISO", "Packs all subdirectories into XISO format.", false, PackageXISOAll));
             menuItems.Add(new MenuItem("Clear Ext", "Removes any extension on output folders", false, ClearExtensions));
             menuItems.Add(new MenuItem("Exit", "", false, Exit));
         }
@@ -44,12 +47,12 @@ namespace AutoXisoExtractor
                 Exit();
             }
 
-            //Perform an initial Detect
-            DetectROMs();
-            Console.Clear();
-
             do
             {
+                //Perform an initial Detect
+                DetectROMs();
+                Console.Clear();
+
                 PrintHeader();
                 PrintMainMenu();
                 Console.Write("Select an option: ");
@@ -91,11 +94,10 @@ namespace AutoXisoExtractor
             Console.WriteLine("#    Christopher Roelle     #");
             Console.WriteLine("#===========================#");
             Console.WriteLine();
-            if (romList.Count > 0)
-            {
-                Console.WriteLine($"Detected ROMs: {romList.Count}");
-                Console.WriteLine();
-            }
+
+            Console.WriteLine($"Detected ROMs: {romList.Count}");
+            Console.WriteLine();
+
             if (!String.IsNullOrEmpty(infoMessage))
             {
                 Console.WriteLine(infoMessage);
@@ -247,7 +249,32 @@ namespace AutoXisoExtractor
 
                     if (ConfirmSelection())
                     {
+                        rawInput = "";
+
+                        do
+                        {
+                            Console.Write("Do you want to delete the original ROM file when finished? (Y/N): ");
+                            rawInput = Console.ReadLine()?.ToLower() ?? "";
+                        }
+                        while (rawInput != "y" && rawInput != "n");
+
+                        bool deleteROM = (rawInput == "y") ? true : false;
+
                         ExtractROMUsingXISOExtractor(selectedROM);
+
+                        if (deleteROM)
+                        {
+                            try
+                            {
+                                Console.WriteLine("Deleting original ROM file...");
+                                File.Delete(selectedROM.Path);
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine($"ERROR::{e.ToString()}");
+                            }
+                        }
+
                         return; //Return after extraction
                     }
                     else
@@ -279,14 +306,39 @@ namespace AutoXisoExtractor
 
             if (ConfirmSelection())
             {
+                string rawInput = "";
+
+                do
+                {
+                    Console.Write("Do you want to delete the original ROM files when finished? (Y/N): ");
+                    rawInput = Console.ReadLine()?.ToLower() ?? "";
+                }
+                while (rawInput != "y" && rawInput != "n");
+
+                bool deleteROMs = (rawInput == "y") ? true : false;
+
                 foreach (ROM rom in romList)
                 {
                     ExtractROMUsingXISOExtractor(rom);
+
+                    if (deleteROMs)
+                    {
+                        try
+                        {
+                            Console.WriteLine("Deleting original ROM file...");
+                            File.Delete(rom.Path);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine($"ERROR::{e.ToString()}");
+                        }
+                    }
                 }
             }
             else
             {
                 Console.WriteLine("Returning to Main Menu...");
+                return;
             }
         }
 
@@ -298,14 +350,6 @@ namespace AutoXisoExtractor
         {
             Console.WriteLine($"\nExtracting: {rom.Name}");
             Console.WriteLine($"Destination: {outputPath}");
-
-            //Make sure XISO Extractor exists
-            if (!File.Exists(xisoPath))
-            {
-                Console.WriteLine("extract-xiso is missing!");
-                Console.WriteLine($"Expected here: {xisoPath}");
-                return;
-            }
 
             //Create the ROM extract destination path if it doesnt exist
             if (!Directory.Exists(outputPath))
@@ -331,6 +375,58 @@ namespace AutoXisoExtractor
             return;
         }
 
+        private void PackageXISOAll()
+        {
+            //Verify that the repackInput folder exists
+            if (!Directory.Exists(repackPath))
+            {
+                Console.WriteLine("Repack path doesn't exist!");
+                try
+                {
+                    Console.WriteLine($"Adding directory: {repackPath}");
+                    Directory.CreateDirectory(repackPath);
+                    Console.WriteLine("\tComplete!");
+                }
+                catch (Exception e) { 
+                    Console.WriteLine($"ERROR::{e.ToString()}");
+                    return;
+                }
+            }
+
+            //Find the folders in the path
+            string[] games = Directory.GetDirectories(repackPath);
+
+            if(games.Length <= 0)
+            {
+                Console.WriteLine("Found no games!");
+                return;
+            }
+
+            Console.WriteLine($"Games found: {games.Length}");
+            Console.WriteLine("Would you like to package all of the games?");
+            if(ConfirmSelection())
+            {
+                foreach (string game in games)
+                {
+                    Console.WriteLine($"Packaging: {game}");
+
+                    string gamePath = Path.GetFullPath(game);
+                    string arguments = $"-c \"{gamePath}\"";
+
+                    InvokeXISOExtractor(xisoPath, arguments);
+
+                }
+            }
+            else
+            {
+                Console.WriteLine("Returning to Main Menu...");
+                return;
+            }
+
+            Console.WriteLine("\nPackaging Complete!");
+
+        }
+
         /// <summary>
         /// Exits the application.
         /// </summary>
@@ -349,6 +445,14 @@ namespace AutoXisoExtractor
         /// <param name="args">The arguments, provided via the rom</param>
         private void InvokeXISOExtractor(string appPath, string args)
         {
+            //Make sure XISO Extractor exists
+            if (!File.Exists(xisoPath))
+            {
+                Console.WriteLine("extract-xiso is missing!");
+                Console.WriteLine($"Expected here: {xisoPath}");
+                return;
+            }
+
             try
             {
                 ProcessStartInfo startInfo = new ProcessStartInfo

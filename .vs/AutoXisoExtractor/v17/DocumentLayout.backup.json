@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\chris\\source\\repos\\AutoXisoExtractor\\AutoXiso\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{F6F36817-D63A-452A-AA1E-B4F4F9E0D9D1}|AutoXisoExtractor\\AutoXisoExtractor.csproj|c:\\users\\chris\\source\\repos\\autoxisoextractor\\autoxiso\\autoxisoextractor\\autoxisoextractor.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{F6F36817-D63A-452A-AA1E-B4F4F9E0D9D1}|AutoXisoExtractor\\AutoXisoExtractor.csproj|solutionrelative:autoxisoextractor\\autoxisoextractor.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{F6F36817-D63A-452A-AA1E-B4F4F9E0D9D1}|AutoXisoExtractor\\AutoXisoExtractor.csproj|c:\\users\\chris\\source\\repos\\autoxisoextractor\\autoxiso\\autoxisoextractor\\autoxiso.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F6F36817-D63A-452A-AA1E-B4F4F9E0D9D1}|AutoXisoExtractor\\AutoXisoExtractor.csproj|solutionrelative:autoxisoextractor\\autoxiso.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
@@ -19,12 +23,25 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "AutoXisoExtractor",
+              "DocumentMoniker": "C:\\Users\\chris\\source\\repos\\AutoXisoExtractor\\AutoXiso\\AutoXisoExtractor\\AutoXisoExtractor.csproj",
+              "RelativeDocumentMoniker": "AutoXisoExtractor\\AutoXisoExtractor.csproj",
+              "ToolTip": "C:\\Users\\chris\\source\\repos\\AutoXisoExtractor\\AutoXiso\\AutoXisoExtractor\\AutoXisoExtractor.csproj",
+              "RelativeToolTip": "AutoXisoExtractor\\AutoXisoExtractor.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-02-07T21:18:40.197Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "AutoXiso.cs",
               "DocumentMoniker": "C:\\Users\\chris\\source\\repos\\AutoXisoExtractor\\AutoXiso\\AutoXisoExtractor\\AutoXiso.cs",
               "RelativeDocumentMoniker": "AutoXisoExtractor\\AutoXiso.cs",
               "ToolTip": "C:\\Users\\chris\\source\\repos\\AutoXisoExtractor\\AutoXiso\\AutoXisoExtractor\\AutoXiso.cs",
               "RelativeToolTip": "AutoXisoExtractor\\AutoXiso.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAA6AAAAAAAAAA==",
+              "ViewState": "AgIAAHUBAAAAAAAAAAAAAIEBAAA8AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-06T01:35:10.58Z",
               "EditorCaption": ""

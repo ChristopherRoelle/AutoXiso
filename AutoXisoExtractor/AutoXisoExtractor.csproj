@@ -14,8 +14,9 @@
     </ItemGroup>
 
 	<Target Name="CreateInputOutputFolders" BeforeTargets="Build">
-		<MakeDir Directories="$(OutDir)input" />
+		<MakeDir Directories="$(OutDir)romInput" />
 		<MakeDir Directories="$(OutDir)output" />
+		<MakeDir Directories="$(OutDir)packXISOInput" />
 	</Target>
 
 </Project>
